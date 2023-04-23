@@ -6,10 +6,10 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/akito0107/xsqlparser"
-	"github.com/akito0107/xsqlparser/dialect"
-	"github.com/akito0107/xsqlparser/sqlast"
-	"github.com/akito0107/xsqlparser/sqltoken"
+	"github.com/moomou/xsqlparser"
+	"github.com/moomou/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser/sqlast"
+	"github.com/moomou/xsqlparser/sqltoken"
 )
 
 func parseFile(t *testing.T, src string) *sqlast.File {

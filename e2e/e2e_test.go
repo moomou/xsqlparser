@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/akito0107/xsqlparser"
-	"github.com/akito0107/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser"
+	"github.com/moomou/xsqlparser/dialect"
 )
 
 func TestParseQuery(t *testing.T) {

@@ -3,7 +3,7 @@ package sqlast
 import (
 	"io"
 
-	"github.com/akito0107/xsqlparser/sqltoken"
+	"github.com/moomou/xsqlparser/sqltoken"
 )
 
 type CommentGroup struct {

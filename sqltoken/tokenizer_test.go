@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/akito0107/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser/dialect"
 )
 
 func TestTokenizer_Tokenize(t *testing.T) {

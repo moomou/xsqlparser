@@ -10,7 +10,7 @@ import (
 
 	errors "golang.org/x/xerrors"
 
-	"github.com/akito0107/xsqlparser/sqltoken"
+	"github.com/moomou/xsqlparser/sqltoken"
 )
 
 // AST Node interface. All node types implements this interface.

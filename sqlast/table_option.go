@@ -3,7 +3,7 @@ package sqlast
 import (
 	"io"
 
-	"github.com/akito0107/xsqlparser/sqltoken"
+	"github.com/moomou/xsqlparser/sqltoken"
 )
 
 //go:generate genmark -t TableOption -e Node

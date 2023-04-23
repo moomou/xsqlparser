@@ -1,9 +1,9 @@
 # xsqlparser
 
-[![GoDoc](https://godoc.org/github.com/akito0107/xsqlparser?status.svg)](https://godoc.org/github.com/akito0107/xsqlparser)
-[![Actions Status](https://github.com/akito0107/xsqlparser/workflows/Go/badge.svg)](https://github.com/akito0107/xsqlparser/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/akito0107/xsqlparser)](https://goreportcard.com/report/github.com/akito0107/xsqlparser)
-[![codecov](https://codecov.io/gh/akito0107/xsqlparser/branch/master/graph/badge.svg)](https://codecov.io/gh/akito0107/xsqlparser)
+[![GoDoc](https://godoc.org/github.com/moomou/xsqlparser?status.svg)](https://godoc.org/github.com/moomou/xsqlparser)
+[![Actions Status](https://github.com/moomou/xsqlparser/workflows/Go/badge.svg)](https://github.com/moomou/xsqlparser/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/moomou/xsqlparser)](https://goreportcard.com/report/github.com/moomou/xsqlparser)
+[![codecov](https://codecov.io/gh/moomou/xsqlparser/branch/master/graph/badge.svg)](https://codecov.io/gh/moomou/xsqlparser)
 
 sql parser for golang.
 
@@ -17,7 +17,7 @@ This repo is ported of [sqlparser-rs](https://github.com/andygrove/sqlparser-rs)
 
 ### Installing
 ```
-$ go get -u github.com/akito0107/xsqlparser/...
+$ go get -u github.com/moomou/xsqlparser/...
 ```
 
 ### How to use
@@ -36,8 +36,8 @@ import (
 
 	"github.com/k0kubun/pp"
 
-	"github.com/akito0107/xsqlparser"
-	"github.com/akito0107/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser"
+	"github.com/moomou/xsqlparser/dialect"
 )
 
 ... 
@@ -462,9 +462,9 @@ import (
 
 	"github.com/k0kubun/pp"
 
-	"github.com/akito0107/xsqlparser"
-	"github.com/akito0107/xsqlparser/sqlast"
-	"github.com/akito0107/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser"
+	"github.com/moomou/xsqlparser/sqlast"
+	"github.com/moomou/xsqlparser/dialect"
 )
 
 func main() {
@@ -515,9 +515,9 @@ import (
 
 	"github.com/k0kubun/pp"
 
-	"github.com/akito0107/xsqlparser"
-	"github.com/akito0107/xsqlparser/sqlast"
-	"github.com/akito0107/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser"
+	"github.com/moomou/xsqlparser/sqlast"
+	"github.com/moomou/xsqlparser/dialect"
 )
 
 func main() {

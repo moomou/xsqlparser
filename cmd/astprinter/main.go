@@ -8,8 +8,8 @@ import (
 
 	"github.com/k0kubun/pp"
 
-	"github.com/akito0107/xsqlparser"
-	"github.com/akito0107/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser"
+	"github.com/moomou/xsqlparser/dialect"
 )
 
 var f = flag.String("f", "stdin", "input sql file (default stdin)")

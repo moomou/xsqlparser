@@ -4,7 +4,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/akito0107/xsqlparser/sqltoken"
+	"github.com/moomou/xsqlparser/sqltoken"
 )
 
 // QueryStmt stmt

@@ -8,7 +8,7 @@ import (
 
 	errors "golang.org/x/xerrors"
 
-	"github.com/akito0107/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser/dialect"
 )
 
 type SQLWord struct {

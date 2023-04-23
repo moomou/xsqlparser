@@ -3,7 +3,7 @@ package sqlast
 import (
 	"log"
 
-	"github.com/akito0107/xsqlparser/sqltoken"
+	"github.com/moomou/xsqlparser/sqltoken"
 )
 
 type CommentMap map[Node][]*CommentGroup

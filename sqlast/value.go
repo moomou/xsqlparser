@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/akito0107/xsqlparser/sqltoken"
+	"github.com/moomou/xsqlparser/sqltoken"
 )
 
 type Value interface {

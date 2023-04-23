@@ -10,9 +10,9 @@ import (
 
 	errors "golang.org/x/xerrors"
 
-	"github.com/akito0107/xsqlparser/dialect"
-	"github.com/akito0107/xsqlparser/sqlast"
-	"github.com/akito0107/xsqlparser/sqltoken"
+	"github.com/moomou/xsqlparser/dialect"
+	"github.com/moomou/xsqlparser/sqlast"
+	"github.com/moomou/xsqlparser/sqltoken"
 )
 
 type Parser struct {

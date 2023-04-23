@@ -1,4 +1,4 @@
-module github.com/akito0107/xsqlparser
+module github.com/moomou/xsqlparser
 
 go 1.16
 

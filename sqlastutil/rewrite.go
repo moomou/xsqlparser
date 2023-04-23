@@ -4,7 +4,7 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/akito0107/xsqlparser/sqlast"
+	"github.com/moomou/xsqlparser/sqlast"
 )
 
 type ApplyFunc func(*Cursor) bool
