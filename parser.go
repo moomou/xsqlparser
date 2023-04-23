@@ -869,6 +869,7 @@ COLUMN_DEF_LOOP:
 				return nil, nil, nil, errors.Errorf("parseColumnConstraints failed: %w", err)
 			}
 			specs = s
+		case "AUTOINCREMENT":
 		case "AUTO_INCREMENT":
 			p.mustNextToken()
 			decorates = append(decorates, &sqlast.AutoIncrement{
