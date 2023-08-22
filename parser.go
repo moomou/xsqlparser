@@ -659,7 +659,7 @@ func (p *Parser) parseElements() ([]sqlast.TableElement, error) {
 
 		word := tok.Value.(*sqltoken.SQLWord)
 		switch word.Keyword {
-		case "CONSTRAINT", "PRIMARY", "CHECK", "FOREIGN", "UNIQUE":
+		case "CONSTRAINT", "PRIMARY", "CHECK", "FOREIGN", "UNIQUE", "REFERENCES":
 			p.prevToken()
 			constraints, err := p.parseTableConstraints()
 			if err != nil {
@@ -678,6 +678,9 @@ func (p *Parser) parseElements() ([]sqlast.TableElement, error) {
 		}
 
 		t, _ := p.nextToken()
+		if t.Value == "ON" {
+			break
+		}
 		if t == nil || (t.Kind != sqltoken.Comma && t.Kind != sqltoken.RParen) {
 			log.Panicf("Expected ',' or ')' after column definition but %v", t)
 		} else if t.Kind == sqltoken.RParen {
@@ -953,6 +956,13 @@ CONSTRAINT_LOOP:
 			if r.Kind != sqltoken.RParen {
 				return nil, errors.Errorf("expected RParen but %+v", r)
 			}
+
+			// TODO: if we encounter `REFERENCES` hardcode
+			// skip 3 tokens
+			p.nextToken()
+			p.nextToken()
+			p.nextToken()
+
 			spec = &sqlast.ReferencesColumnSpec{
 				TableName:  tname,
 				Columns:    columns,
