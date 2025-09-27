@@ -1118,6 +1118,48 @@ type ExplainStmt struct {
 	Explain sqltoken.Pos
 }
 
+type CreateVirtualTableStmt struct {
+	stmt
+	Create    sqltoken.Pos
+	Name      *ObjectName
+	Using     *Ident
+	Arguments []string
+}
+
+func (c *CreateVirtualTableStmt) Pos() sqltoken.Pos {
+	return c.Create
+}
+
+func (c *CreateVirtualTableStmt) End() sqltoken.Pos {
+	if len(c.Arguments) > 0 {
+		return sqltoken.Pos{} // Return position of last argument when implemented
+	}
+	return c.Name.End()
+}
+
+func (c *CreateVirtualTableStmt) ToSQLString() string {
+	return toSQLString(c)
+}
+
+func (c *CreateVirtualTableStmt) WriteTo(w io.Writer) (int64, error) {
+	sw := newSQLWriter(w)
+	sw.Bytes([]byte("CREATE VIRTUAL TABLE ")).Node(c.Name)
+	if c.Using != nil {
+		sw.Bytes([]byte(" USING ")).Node(c.Using)
+	}
+	if len(c.Arguments) > 0 {
+		sw.Bytes([]byte("("))
+		for i, arg := range c.Arguments {
+			if i > 0 {
+				sw.Bytes([]byte(", "))
+			}
+			sw.Bytes([]byte(arg))
+		}
+		sw.Bytes([]byte(")"))
+	}
+	return sw.End()
+}
+
 func (e *ExplainStmt) Pos() sqltoken.Pos {
 	return e.Explain
 }

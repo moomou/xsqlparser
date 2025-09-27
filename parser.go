@@ -519,7 +519,12 @@ func (p *Parser) parseCreate() (sqlast.Stmt, error) {
 	if !ok {
 		return nil, errors.Errorf("expect CREATE but %+v", t)
 	}
+	
+	vtok, _, _ := p.parseKeyword("VIRTUAL")
 	if ok, _, _ := p.parseKeyword("TABLE"); ok {
+		if vtok {
+			return p.parseCreateVirtualTable(t)
+		}
 		return p.parseCreateTable(t)
 	}
 
@@ -538,7 +543,7 @@ func (p *Parser) parseCreate() (sqlast.Stmt, error) {
 		return p.parseCreateIndex(uiok)
 	}
 
-	log.Panicln("TABLE or VIEW or UNIQUE INDEX or INDEX after create")
+	log.Panicln("TABLE or VIRTUAL TABLE or VIEW or UNIQUE INDEX or INDEX after create")
 
 	return nil, nil
 }
@@ -642,6 +647,54 @@ func (p *Parser) parseCreateIndex(unique bool) (sqlast.Stmt, error) {
 		MethodName:  methodName,
 		ColumnNames: columns,
 		Selection:   selection,
+	}, nil
+}
+
+func (p *Parser) parseCreateVirtualTable(create *sqltoken.Token) (sqlast.Stmt, error) {
+	name, err := p.parseObjectName()
+	if err != nil {
+		return nil, errors.Errorf("parseObjectName failed: %w", err)
+	}
+
+	var using *sqlast.Ident
+	if ok, _, _ := p.parseKeyword("USING"); ok {
+		moduleName, err := p.parseIdentifier()
+		if err != nil {
+			return nil, errors.Errorf("parseIdentifier failed: %w", err)
+		}
+		using = moduleName
+	}
+
+	var args []string
+	if ok, _ := p.consumeToken(sqltoken.LParen); ok {
+		// Parse virtual table module arguments
+		for {
+			tok, err := p.peekToken()
+			if err != nil {
+				return nil, errors.Errorf("peekToken failed: %w", err)
+			}
+			if tok.Kind == sqltoken.RParen {
+				p.mustNextToken()
+				break
+			}
+			if tok.Kind == sqltoken.Comma {
+				p.mustNextToken()
+				continue
+			}
+			p.mustNextToken()
+			if word, ok := tok.Value.(*sqltoken.SQLWord); ok {
+				args = append(args, word.String())
+			} else if str, ok := tok.Value.(string); ok {
+				args = append(args, str)
+			}
+		}
+	}
+
+	return &sqlast.CreateVirtualTableStmt{
+		Create:    create.From,
+		Name:      name,
+		Using:     using,
+		Arguments: args,
 	}, nil
 }
 
