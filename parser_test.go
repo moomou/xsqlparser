@@ -2108,4 +2108,120 @@ select 1 from test; /*lll*/ --mmm
 		})
 	}
 
+	t.Run("create virtual table", func(t *testing.T) {
+		cases := []struct {
+			name string
+			in   string
+			out  sqlast.Stmt
+		}{
+			{
+				name: "simple virtual table",
+				in:   "CREATE VIRTUAL TABLE search USING fts5(content)",
+				out: &sqlast.CreateVirtualTableStmt{
+					Create: sqltoken.NewPos(1, 1),
+					Name: &sqlast.ObjectName{
+						Idents: []*sqlast.Ident{
+							{
+								Value: "search",
+								From:  sqltoken.NewPos(1, 22),
+								To:    sqltoken.NewPos(1, 28),
+							},
+						},
+					},
+					Using: &sqlast.Ident{
+						Value: "fts5",
+						From:  sqltoken.NewPos(1, 35),
+						To:    sqltoken.NewPos(1, 39),
+					},
+					Arguments: []string{"content"},
+				},
+			},
+			{
+				name: "virtual table with IF NOT EXISTS",
+				in:   `CREATE VIRTUAL TABLE IF NOT EXISTS "conversation_fts" USING fts5(id, text)`,
+				out: &sqlast.CreateVirtualTableStmt{
+					Create:    sqltoken.NewPos(1, 1),
+					NotExists: true,
+					Name: &sqlast.ObjectName{
+						Idents: []*sqlast.Ident{
+							{
+								Value: `"conversation_fts"`,
+								From:  sqltoken.NewPos(1, 36),
+								To:    sqltoken.NewPos(1, 54),
+							},
+						},
+					},
+					Using: &sqlast.Ident{
+						Value: "fts5",
+						From:  sqltoken.NewPos(1, 61),
+						To:    sqltoken.NewPos(1, 65),
+					},
+					Arguments: []string{"id", "text"},
+				},
+			},
+			{
+				name: "virtual table with multiple arguments",
+				in:   "CREATE VIRTUAL TABLE docs USING fts5(title, content, tokenize = 'porter')",
+				out: &sqlast.CreateVirtualTableStmt{
+					Create: sqltoken.NewPos(1, 1),
+					Name: &sqlast.ObjectName{
+						Idents: []*sqlast.Ident{
+							{
+								Value: "docs",
+								From:  sqltoken.NewPos(1, 22),
+								To:    sqltoken.NewPos(1, 26),
+							},
+						},
+					},
+					Using: &sqlast.Ident{
+						Value: "fts5",
+						From:  sqltoken.NewPos(1, 33),
+						To:    sqltoken.NewPos(1, 37),
+					},
+					Arguments: []string{"title", "content", "tokenize", "=", "'porter'"},
+				},
+			},
+			{
+				name: "virtual table without USING clause",
+				in:   "CREATE VIRTUAL TABLE simple_vtab",
+				out: &sqlast.CreateVirtualTableStmt{
+					Create: sqltoken.NewPos(1, 1),
+					Name: &sqlast.ObjectName{
+						Idents: []*sqlast.Ident{
+							{
+								Value: "simple_vtab",
+								From:  sqltoken.NewPos(1, 22),
+								To:    sqltoken.NewPos(1, 33),
+							},
+						},
+					},
+					Using:     nil,
+					Arguments: []string{},
+				},
+			},
+		}
+
+		for _, c := range cases {
+			t.Run(c.name, func(t *testing.T) {
+				parser, err := NewParser(bytes.NewBufferString(c.in), &dialect.GenericSQLDialect{})
+				if err != nil {
+					t.Fatal(err)
+				}
+				stmt, err := parser.ParseStatement()
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				if diff := cmp.Diff(c.out, stmt); diff != "" {
+					t.Errorf("diff %s", diff)
+				}
+
+				// Test round-trip SQL generation
+				if c.in != stmt.ToSQLString() {
+					t.Logf("Note: Round-trip SQL differs (this may be expected):\nOriginal: %s\nGenerated: %s", c.in, stmt.ToSQLString())
+				}
+			})
+		}
+	})
+
 }

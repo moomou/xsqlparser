@@ -651,6 +651,7 @@ func (p *Parser) parseCreateIndex(unique bool) (sqlast.Stmt, error) {
 }
 
 func (p *Parser) parseCreateVirtualTable(create *sqltoken.Token) (sqlast.Stmt, error) {
+	notExists, _, _ := p.parseKeywords("IF", "NOT", "EXISTS")
 	name, err := p.parseObjectName()
 	if err != nil {
 		return nil, errors.Errorf("parseObjectName failed: %w", err)
@@ -692,6 +693,7 @@ func (p *Parser) parseCreateVirtualTable(create *sqltoken.Token) (sqlast.Stmt, e
 
 	return &sqlast.CreateVirtualTableStmt{
 		Create:    create.From,
+		NotExists: notExists,
 		Name:      name,
 		Using:     using,
 		Arguments: args,

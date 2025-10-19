@@ -5,7 +5,8 @@
       "Bash(go test:*)",
       "Bash(mkdir:*)",
       "Bash(mv:*)",
-      "Bash(go build:*)"
+      "Bash(go build:*)",
+      "Bash(go mod tidy:*)"
     ],
     "deny": []
   }

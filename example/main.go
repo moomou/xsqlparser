@@ -17,6 +17,7 @@ func main() {
 	withCTE()
 	createASTList()
 	commentMap()
+	testVirtualTable()
 }
 
 func simpleSelect() {
@@ -141,4 +142,33 @@ CREATE TABLE test (
 	createTable := file.Stmts[0].(*sqlast.CreateTableStmt)
 
 	pp.Println(m[createTable.Elements[0]]) // you can show `associate with columndef` and `columndef` comments
+}
+
+func testVirtualTable() {
+	str := `CREATE VIRTUAL TABLE IF NOT EXISTS "conversation_fts" USING fts5(id, text, prefix = "2", prefix = "3")`
+
+	parser, err := xsqlparser.NewParser(bytes.NewBufferString(str), &dialect.GenericSQLDialect{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	stmt, err := parser.ParseStatement()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Type assert to check if it's a CreateVirtualTableStmt
+	virtualTableStmt, ok := stmt.(*sqlast.CreateVirtualTableStmt)
+	if !ok {
+		log.Fatal("Expected CreateVirtualTableStmt")
+	}
+
+	pp.Println(virtualTableStmt)
+	log.Printf("NotExists: %v", virtualTableStmt.NotExists)
+	log.Printf("Table Name: %s", virtualTableStmt.Name)
+	log.Printf("Using: %s", virtualTableStmt.Using)
+	log.Printf("Arguments: %v", virtualTableStmt.Arguments)
+
+	log.Println("Round-trip SQL:")
+	log.Println(virtualTableStmt.ToSQLString())
 }

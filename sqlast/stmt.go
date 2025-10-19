@@ -1121,6 +1121,7 @@ type ExplainStmt struct {
 type CreateVirtualTableStmt struct {
 	stmt
 	Create    sqltoken.Pos
+	NotExists bool
 	Name      *ObjectName
 	Using     *Ident
 	Arguments []string
@@ -1143,7 +1144,9 @@ func (c *CreateVirtualTableStmt) ToSQLString() string {
 
 func (c *CreateVirtualTableStmt) WriteTo(w io.Writer) (int64, error) {
 	sw := newSQLWriter(w)
-	sw.Bytes([]byte("CREATE VIRTUAL TABLE ")).Node(c.Name)
+	sw.Bytes([]byte("CREATE VIRTUAL TABLE "))
+	sw.If(c.NotExists, []byte("IF NOT EXISTS "))
+	sw.Node(c.Name)
 	if c.Using != nil {
 		sw.Bytes([]byte(" USING ")).Node(c.Using)
 	}
